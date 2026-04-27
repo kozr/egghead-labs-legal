@@ -1,0 +1,1233 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Blind Box Tracker helps collectors track owned figures, wishlists, trades, secrets, and completion across favorite collectible series.">
+  <title>Blind Box Tracker | Track Every Blind Box in Your Collection</title>
+  <style>
+    :root {
+      --cream: #f7eddf;
+      --cream-2: #fff8ed;
+      --brown: #3a2117;
+      --brown-2: #6f5040;
+      --lime: #5f933f;
+      --lime-2: #d9efcd;
+      --pink: #ffd7d1;
+      --pink-2: #fff0ed;
+      --white: #fffdf8;
+      --line: rgba(58, 33, 23, 0.14);
+      --shadow: 0 24px 70px rgba(58, 33, 23, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--brown);
+      background: var(--white);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      letter-spacing: 0;
+    }
+
+    img,
+    svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .nav {
+      position: fixed;
+      z-index: 50;
+      top: 0;
+      right: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 5%;
+      border-bottom: 1px solid rgba(58, 33, 23, 0.08);
+      background: rgba(255, 253, 248, 0.86);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--brown);
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    .brand img {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      color: var(--brown-2);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+    }
+
+    .nav-links a:hover {
+      color: var(--lime);
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 48px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 20px;
+      border: 2px solid var(--brown);
+      border-radius: 8px;
+      background: var(--white);
+      color: var(--brown);
+      font-weight: 900;
+      text-decoration: none;
+      box-shadow: 5px 5px 0 var(--brown);
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .button:hover {
+      transform: translate(2px, 2px);
+      box-shadow: 3px 3px 0 var(--brown);
+    }
+
+    .button-primary {
+      background: var(--lime);
+      color: var(--white);
+    }
+
+    .button svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .app-store-badge {
+      display: inline-block;
+      width: 188px;
+      border-radius: 8px;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(340px, 0.8fr);
+      gap: 44px;
+      align-items: center;
+      padding: 110px 5% 64px;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(255, 253, 248, 0.08), rgba(255, 253, 248, 0.92) 88%),
+        linear-gradient(135deg, var(--cream) 0%, var(--white) 46%, #edf6de 100%);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(58, 33, 23, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(58, 33, 23, 0.035) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.72));
+    }
+
+    .hero-copy,
+    .hero-media {
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 18px;
+      color: var(--lime);
+      font-size: 13px;
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 36px;
+      height: 3px;
+      border-radius: 999px;
+      background: var(--pink);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 690px;
+      margin-bottom: 22px;
+      font-size: 64px;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .hero-subhead {
+      max-width: 610px;
+      margin-bottom: 30px;
+      color: var(--brown-2);
+      font-size: 20px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .collector-note {
+      max-width: 570px;
+      color: var(--brown-2);
+      font-size: 15px;
+      font-weight: 750;
+    }
+
+    .hero-media {
+      justify-self: center;
+      width: min(100%, 430px);
+    }
+
+    .phone-shot {
+      position: relative;
+      padding: 16px;
+      border: 2px solid var(--brown);
+      border-radius: 8px;
+      background: var(--pink-2);
+      box-shadow: 12px 12px 0 rgba(58, 33, 23, 0.95);
+    }
+
+    .phone-shot img {
+      width: 100%;
+      max-height: 72svh;
+      object-fit: contain;
+      object-position: bottom;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-strip {
+      position: absolute;
+      right: -28px;
+      bottom: 56px;
+      display: grid;
+      gap: 8px;
+      width: 178px;
+      padding: 12px;
+      border: 2px solid var(--brown);
+      border-radius: 8px;
+      background: var(--white);
+      box-shadow: 7px 7px 0 var(--brown);
+    }
+
+    .stat-strip span {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--brown-2);
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .stat-strip strong {
+      color: var(--brown);
+    }
+
+    .section {
+      padding: 86px 5%;
+    }
+
+    .section-cream {
+      background: var(--cream);
+    }
+
+    .section-white {
+      background: var(--white);
+    }
+
+    .section-green {
+      background: linear-gradient(180deg, #f7fbef, var(--lime-2));
+    }
+
+    .wrap {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+    }
+
+    .section-header {
+      max-width: 780px;
+      margin-bottom: 34px;
+    }
+
+    .section-kicker {
+      margin-bottom: 10px;
+      color: var(--lime);
+      font-size: 13px;
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin-bottom: 14px;
+      font-size: 42px;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .section-lede {
+      color: var(--brown-2);
+      font-size: 18px;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.82fr);
+      gap: 44px;
+      align-items: center;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .feature-card,
+    .status-board,
+    .series-card,
+    .faq details {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--white);
+      box-shadow: 0 12px 34px rgba(58, 33, 23, 0.08);
+    }
+
+    .feature-card {
+      min-height: 206px;
+      padding: 22px;
+    }
+
+    .feature-icon {
+      display: inline-grid;
+      width: 42px;
+      height: 42px;
+      margin-bottom: 18px;
+      place-items: center;
+      border: 2px solid var(--brown);
+      border-radius: 8px;
+      background: var(--lime-2);
+      box-shadow: 3px 3px 0 var(--brown);
+    }
+
+    .feature-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: var(--brown);
+      stroke-width: 2.3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    h3 {
+      margin-bottom: 8px;
+      font-size: 20px;
+      line-height: 1.22;
+      letter-spacing: 0;
+    }
+
+    .feature-card p,
+    .series-card p,
+    .faq p,
+    .status-board p {
+      color: var(--brown-2);
+    }
+
+    .status-board {
+      overflow: hidden;
+      border: 2px solid var(--brown);
+      box-shadow: 8px 8px 0 var(--brown);
+    }
+
+    .board-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 18px;
+      border-bottom: 2px solid var(--brown);
+      background: var(--pink-2);
+      font-weight: 950;
+    }
+
+    .board-pill {
+      padding: 5px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--brown-2);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .board-list {
+      display: grid;
+      gap: 12px;
+      padding: 18px;
+    }
+
+    .board-row {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      min-height: 62px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fffaf2;
+    }
+
+    .mini-image {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 50% 32%, rgba(58, 33, 23, 0.72) 0 5px, transparent 6px),
+        linear-gradient(135deg, var(--pink), var(--lime-2));
+    }
+
+    .mini-image.green {
+      background:
+        radial-gradient(circle at 42% 38%, rgba(58, 33, 23, 0.72) 0 4px, transparent 5px),
+        radial-gradient(circle at 62% 38%, rgba(58, 33, 23, 0.72) 0 4px, transparent 5px),
+        linear-gradient(135deg, var(--lime-2), #ecf7db);
+    }
+
+    .mini-image.dark {
+      background:
+        radial-gradient(circle at 42% 38%, rgba(255, 253, 248, 0.8) 0 4px, transparent 5px),
+        radial-gradient(circle at 62% 38%, rgba(255, 253, 248, 0.8) 0 4px, transparent 5px),
+        linear-gradient(135deg, var(--brown), #1e120c);
+    }
+
+    .row-title {
+      margin: 0;
+      font-weight: 950;
+    }
+
+    .row-meta {
+      margin: 2px 0 0;
+      color: var(--brown-2);
+      font-size: 13px;
+    }
+
+    .status-chip {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--lime-2);
+      color: var(--brown);
+      font-size: 12px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .status-chip.pink {
+      background: var(--pink);
+    }
+
+    .progress-card {
+      margin-top: 22px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 253, 248, 0.74);
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      color: var(--brown-2);
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .progress-bar {
+      height: 12px;
+      overflow: hidden;
+      border: 1px solid var(--brown);
+      border-radius: 999px;
+      background: var(--white);
+    }
+
+    .progress-bar span {
+      display: block;
+      width: 72%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--lime), var(--pink));
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 22px;
+    }
+
+    .tag {
+      padding: 8px 11px;
+      border: 1px solid rgba(58, 33, 23, 0.18);
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--brown-2);
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .trade-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .trade-card {
+      min-height: 132px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--white);
+    }
+
+    .trade-label {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--pink);
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    .screenshot-card {
+      padding: 16px;
+      border: 2px solid var(--brown);
+      border-radius: 8px;
+      background: var(--white);
+      box-shadow: 8px 8px 0 var(--brown);
+    }
+
+    .screenshot-card img {
+      border-radius: 8px;
+    }
+
+    .vote-board {
+      background: var(--brown);
+      color: var(--white);
+    }
+
+    .vote-board .board-top {
+      background: var(--lime-2);
+      color: var(--brown);
+    }
+
+    .vote-board .board-row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      border-color: rgba(255, 253, 248, 0.16);
+      background: rgba(255, 253, 248, 0.08);
+      color: var(--white);
+    }
+
+    .vote-board .status-chip {
+      background: rgba(217, 239, 205, 0.16);
+      color: #e6f8d9;
+    }
+
+    .series-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .series-card {
+      overflow: hidden;
+    }
+
+    .series-card img,
+    .series-placeholder {
+      width: 100%;
+      aspect-ratio: 2 / 1;
+      object-fit: cover;
+      background: var(--pink-2);
+    }
+
+    .series-placeholder {
+      display: grid;
+      place-items: center;
+      color: var(--brown-2);
+      font-weight: 950;
+    }
+
+    .series-body {
+      padding: 16px;
+    }
+
+    .series-body p {
+      margin-bottom: 0;
+      font-size: 14px;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .faq details {
+      padding: 18px 20px;
+    }
+
+    .faq summary {
+      cursor: pointer;
+      font-weight: 950;
+    }
+
+    .faq p {
+      margin: 12px 0 0;
+    }
+
+    .download-section {
+      padding: 86px 5% 104px;
+      color: var(--white);
+      background: var(--brown);
+    }
+
+    .download-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 28px;
+      align-items: center;
+      width: min(1120px, 100%);
+      margin: 0 auto;
+    }
+
+    .download-section .section-kicker {
+      color: var(--lime-2);
+    }
+
+    .download-panel p {
+      max-width: 660px;
+      margin-bottom: 0;
+      color: var(--cream);
+      font-size: 18px;
+    }
+
+    .footer {
+      padding: 30px 5%;
+      border-top: 1px solid var(--line);
+      background: var(--white);
+    }
+
+    .footer-inner {
+      display: flex;
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      color: var(--brown-2);
+      font-size: 13px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-weight: 850;
+    }
+
+    .sticky-download {
+      position: fixed;
+      z-index: 60;
+      right: 12px;
+      bottom: 12px;
+      left: 12px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 10px 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 253, 248, 0.96);
+      box-shadow: 0 16px 34px rgba(58, 33, 23, 0.2);
+      backdrop-filter: blur(16px);
+    }
+
+    .sticky-download strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .sticky-download span {
+      display: block;
+      color: var(--brown-2);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .sticky-download .button {
+      min-height: 42px;
+      padding: 0 14px;
+      font-size: 14px;
+      box-shadow: 3px 3px 0 var(--brown);
+      white-space: nowrap;
+    }
+
+    @media (max-width: 1040px) {
+      .hero,
+      .split,
+      .download-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-media {
+        justify-self: start;
+        width: min(100%, 360px);
+      }
+
+      .feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .series-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding-bottom: 76px;
+      }
+
+      .nav {
+        padding: 12px 16px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding: 96px 18px 54px;
+      }
+
+      h1 {
+        font-size: 40px;
+      }
+
+      h2 {
+        font-size: 32px;
+      }
+
+      .hero-subhead,
+      .section-lede,
+      .download-panel p {
+        font-size: 17px;
+      }
+
+      .hero-actions .button {
+        width: 100%;
+      }
+
+      .app-store-badge {
+        width: 172px;
+      }
+
+      .stat-strip {
+        position: static;
+        width: auto;
+        margin-top: 14px;
+      }
+
+      .section,
+      .download-section {
+        padding: 64px 18px;
+      }
+
+      .feature-grid,
+      .trade-grid,
+      .faq-grid,
+      .series-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .board-row {
+        grid-template-columns: 40px minmax(0, 1fr);
+      }
+
+      .board-row .status-chip {
+        grid-column: 2;
+        width: max-content;
+      }
+
+      .vote-board .board-row {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .sticky-download {
+        display: flex;
+      }
+    }
+
+    @media (max-width: 380px) {
+      h1 {
+        font-size: 34px;
+      }
+
+      .sticky-download span {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav" aria-label="Main navigation">
+    <a class="brand" href="#top" aria-label="Blind Box Tracker home">
+      <img src="assets/landing/icon.png" alt="">
+      <span>Blind Box Tracker</span>
+    </a>
+    <nav class="nav-links" aria-label="Page sections">
+      <a href="#checklist">Checklist</a>
+      <a href="#collectors">Features</a>
+      <a href="#supported">Supported Series</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Made for collectors</p>
+        <h1 id="hero-title">Track every blind box in your collection.</h1>
+        <p class="hero-subhead">Keep tabs on what you own, what you want, and what you're ready to trade across your favorite collectible series.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="https://apps.apple.com/us/app/blind-box-tracker/id6742131820" target="_blank" rel="noopener" aria-label="Download Blind Box Tracker on the App Store">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>
+            Download the App
+          </a>
+          <a class="button" href="#supported">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 6h13"></path><path d="M8 12h13"></path><path d="M8 18h13"></path><path d="M3 6h.01"></path><path d="M3 12h.01"></path><path d="M3 18h.01"></path></svg>
+            See Supported Series
+          </a>
+          <a href="https://apps.apple.com/us/app/blind-box-tracker/id6742131820" target="_blank" rel="noopener" aria-label="Download on the App Store">
+            <img class="app-store-badge" src="assets/landing/download-on-app-store.png" alt="Download on the App Store">
+          </a>
+        </div>
+        <p class="collector-note">No more mystery tabs, notes app lists, and half-finished spreadsheets. Open your series, tap your pulls, and know exactly what is missing from the shelf.</p>
+      </div>
+      <div class="hero-media">
+        <div class="phone-shot">
+          <img src="assets/landing/collection-tracking-current-ui.png" alt="Blind Box Tracker app screenshot showing a Smiskis collection checklist with filters, search, progress, and collectible cards.">
+          <div class="stat-strip" aria-label="App coverage highlights">
+            <span><strong>108+</strong> Sonny Angels collections</span>
+            <span><strong>20+</strong> Smiskis collections</span>
+            <span><strong>3</strong> active collection families</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="checklist" class="section section-cream">
+      <div class="wrap split">
+        <div>
+          <div class="section-header">
+            <p class="section-kicker">Everything in one checklist</p>
+            <h2>One tidy place for your shelf, wishlist, and dupes.</h2>
+            <p class="section-lede">Mark each figure as owned, wishlisted, or up for trade. Blind Box Tracker keeps your counts, completion, and missing pieces together so your collection stays easy to scan after every pull.</p>
+          </div>
+          <div class="tag-row" aria-label="Checklist features">
+            <span class="tag">Owned counts</span>
+            <span class="tag">Wishlist</span>
+            <span class="tag">Up for trade</span>
+            <span class="tag">Series completion</span>
+          </div>
+          <div class="progress-card">
+            <div class="progress-label">
+              <span>Smiskis Series 1</span>
+              <span>1/11 logged</span>
+            </div>
+            <div class="progress-bar" aria-hidden="true"><span></span></div>
+          </div>
+        </div>
+
+        <div class="status-board" aria-label="Example collection checklist">
+          <div class="board-top">
+            <span>Current series</span>
+            <span class="board-pill">quick tap tracking</span>
+          </div>
+          <div class="board-list">
+            <div class="board-row">
+              <span class="mini-image green" aria-hidden="true"></span>
+              <div>
+                <p class="row-title">Owned</p>
+                <p class="row-meta">Log pulls and update counts after every box.</p>
+              </div>
+              <span class="status-chip">1/11</span>
+            </div>
+            <div class="board-row">
+              <span class="mini-image" aria-hidden="true"></span>
+              <div>
+                <p class="row-title">Wishlist</p>
+                <p class="row-meta">Keep ISO and dream pulls separate from owned figures.</p>
+              </div>
+              <span class="status-chip pink">ISO</span>
+            </div>
+            <div class="board-row">
+              <span class="mini-image dark" aria-hidden="true"></span>
+              <div>
+                <p class="row-title">Trade</p>
+                <p class="row-meta">Know which duplicates are ready for your next post.</p>
+              </div>
+              <span class="status-chip">FT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="collectors" class="section section-white">
+      <div class="wrap">
+        <div class="section-header">
+          <p class="section-kicker">Built for collectors</p>
+          <h2>Fast enough for unboxing night. Organized enough for the long hunt.</h2>
+          <p class="section-lede">The app is shaped around how collectors actually track: quick taps, searchable series, secret figures, and progress you can understand at a glance.</p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20V10"></path><path d="M18 20V4"></path><path d="M6 20v-4"></path></svg></span>
+            <h3>Fast tapping</h3>
+            <p>Add a pull, update a count, or flip a figure to trade without digging through menus.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 4 4"></path></svg></span>
+            <h3>Searchable series</h3>
+            <p>Jump straight to the collection you opened, from shelf staples to the newest drops.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 8 9l-6 1 4 5-1 6 7-3 7 3-1-6 4-5-6-1-4-6Z"></path></svg></span>
+            <h3>Secret figures</h3>
+            <p>Track secrets, chase variants, and rare pulls without losing them inside a notes app.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 8-8"></path><path d="M12 4v8h8"></path></svg></span>
+            <h3>Completion progress</h3>
+            <p>See how close you are to finishing a series before the next trade meet or store run.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 7h8"></path><path d="M8 12h8"></path><path d="M8 17h5"></path><rect x="4" y="3" width="16" height="18" rx="2"></rect></svg></span>
+            <h3>No messy spreadsheets</h3>
+            <p>Keep your collection pocket-sized and pretty, even when your shelf gets complicated.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 7h10v10H7z"></path><path d="M4 4h4"></path><path d="M16 4h4"></path><path d="M4 20h4"></path><path d="M16 20h4"></path></svg></span>
+            <h3>Made for series</h3>
+            <p>Follow complete lineups instead of making every figure from scratch by hand.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-green">
+      <div class="wrap split">
+        <div>
+          <div class="section-header">
+            <p class="section-kicker">Find what you're missing</p>
+            <h2>Know your ISO, DISO, duplicates, and trade pile before you post.</h2>
+            <p class="section-lede">Use your wishlist and trade filters to prep for collector groups, meetups, and Discord swaps. Trade matching is on the roadmap, so the lists you build now can become even more useful later.</p>
+          </div>
+          <div class="trade-grid">
+            <div class="trade-card">
+              <span class="trade-label">ISO</span>
+              <h3>Keep a clean want list</h3>
+              <p>Track figures you are searching for without mixing them into owned counts.</p>
+            </div>
+            <div class="trade-card">
+              <span class="trade-label">DISO</span>
+              <h3>Flag dream pulls</h3>
+              <p>Use your wishlist to keep the must-haves separate from casual wants.</p>
+            </div>
+            <div class="trade-card">
+              <span class="trade-label">Duplicates</span>
+              <h3>Spot trade-ready extras</h3>
+              <p>See which figures you can offer without checking every storage box.</p>
+            </div>
+            <div class="trade-card">
+              <span class="trade-label">Coming next</span>
+              <h3>Future trade matching</h3>
+              <p>Planned matching will help connect collectors with complementary lists.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="status-board" aria-label="Example trade list">
+          <div class="board-top">
+            <span>Trade check</span>
+            <span class="board-pill">ready to post</span>
+          </div>
+          <div class="board-list">
+            <div class="board-row">
+              <span class="mini-image green" aria-hidden="true"></span>
+              <div>
+                <p class="row-title">Wishlist: secret pull</p>
+                <p class="row-meta">High priority</p>
+              </div>
+              <span class="status-chip">DISO</span>
+            </div>
+            <div class="board-row">
+              <span class="mini-image" aria-hidden="true"></span>
+              <div>
+                <p class="row-title">For trade: duplicate</p>
+                <p class="row-meta">Available for collector groups</p>
+              </div>
+              <span class="status-chip pink">FT</span>
+            </div>
+            <div class="board-row">
+              <span class="mini-image dark" aria-hidden="true"></span>
+              <div>
+                <p class="row-title">Need: series closer</p>
+                <p class="row-meta">Last missing piece</p>
+              </div>
+              <span class="status-chip">ISO</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-white">
+      <div class="wrap split">
+        <div>
+          <div class="section-header">
+            <p class="section-kicker">Always growing</p>
+            <h2>Missing a series? Ask for it, then help decide what comes next.</h2>
+            <p class="section-lede">Collectors can suggest missing collections and vote on upcoming additions. The goal is simple: make the tracker better for the series people are actually opening, hunting, and trading right now.</p>
+          </div>
+          <div class="tag-row">
+            <span class="tag">Suggest a series</span>
+            <span class="tag">Vote on additions</span>
+            <span class="tag">Track new releases</span>
+          </div>
+        </div>
+
+        <div class="status-board vote-board" aria-label="Example voting board">
+          <div class="board-top">
+            <span>Collector requests</span>
+            <span class="board-pill">voting open</span>
+          </div>
+          <div class="board-list">
+            <div class="board-row">
+              <strong>New seasonal mini series</strong>
+              <span class="status-chip">248 votes</span>
+            </div>
+            <div class="board-row">
+              <strong>Secret variant checklist</strong>
+              <span class="status-chip">191 votes</span>
+            </div>
+            <div class="board-row">
+              <strong>More plush and keychain lines</strong>
+              <span class="status-chip">156 votes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-cream">
+      <div class="wrap split">
+        <div>
+          <div class="section-header">
+            <p class="section-kicker">Share your collection</p>
+            <h2>Show the shelf without rebuilding it for every post.</h2>
+            <p class="section-lede">Create clean collection images for TikTok, Instagram, Discord, and Reddit. Show what you own, what you are hunting, and what is up for trade in a format other collectors can read quickly.</p>
+          </div>
+          <div class="tag-row">
+            <span class="tag">TikTok</span>
+            <span class="tag">Instagram</span>
+            <span class="tag">Discord</span>
+            <span class="tag">Reddit</span>
+          </div>
+        </div>
+
+        <div class="screenshot-card">
+          <img src="assets/landing/demo.png" alt="Blind Box Tracker share image showing a collection grid and social icons.">
+        </div>
+      </div>
+    </section>
+
+    <section id="supported" class="section section-white">
+      <div class="wrap">
+        <div class="section-header">
+          <p class="section-kicker">Supported collections</p>
+          <h2>Start with the series collectors ask for most.</h2>
+          <p class="section-lede">Track popular blind box and collectible lines, with more collections added from community requests.</p>
+        </div>
+
+        <div class="series-grid" aria-label="Supported collectible series">
+          <article class="series-card">
+            <img src="assets/landing/sonny-angels-banner.png" alt="Sonny Angels collection banner.">
+            <div class="series-body">
+              <h3>Sonny Angels</h3>
+              <p>Track 108+ collections, regular figures, secrets, dupes, and wishlist pieces.</p>
+            </div>
+          </article>
+          <article class="series-card">
+            <img src="assets/landing/smiskis-banner.png" alt="Smiskis collection banner.">
+            <div class="series-body">
+              <h3>Smiski</h3>
+              <p>Keep your tiny green favorites organized by series, count, and trade status.</p>
+            </div>
+          </article>
+          <article class="series-card">
+            <img src="assets/landing/hironos-banner.png" alt="Hirono collection banner.">
+            <div class="series-body">
+              <h3>Hirono</h3>
+              <p>Track moody favorites, missing pulls, and the one figure you keep hunting.</p>
+            </div>
+          </article>
+          <article class="series-card">
+            <img src="assets/landing/pokemons-banner.png" alt="Pokémon collection banner.">
+            <div class="series-body">
+              <h3>Pokémon</h3>
+              <p>Coming soon for collectible pulls and wishlist targets.</p>
+            </div>
+          </article>
+          <article class="series-card">
+            <div class="series-placeholder">Vote next</div>
+            <div class="series-body">
+              <h3>More coming soon</h3>
+              <p>Suggest missing series and help choose what gets added next.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="section section-cream faq">
+      <div class="wrap">
+        <div class="section-header">
+          <p class="section-kicker">FAQ</p>
+          <h2>Small answers before you start tracking.</h2>
+        </div>
+
+        <div class="faq-grid">
+          <details>
+            <summary>Is the app free?</summary>
+            <p>Yes. Blind Box Tracker is currently a free app for collectors.</p>
+          </details>
+          <details>
+            <summary>Can I request missing series?</summary>
+            <p>Yes. You can suggest collections that are missing and vote on which series should be added next.</p>
+          </details>
+          <details>
+            <summary>Can I track secrets?</summary>
+            <p>Yes. Secret figures, variants, and hard-to-find pulls can be tracked alongside regular checklist items.</p>
+          </details>
+          <details>
+            <summary>Does it support wishlist and trades?</summary>
+            <p>Yes. You can mark wishlist figures, duplicates, and items you are ready to trade. Trade matching is planned for a future release.</p>
+          </details>
+          <details>
+            <summary>Is this official?</summary>
+            <p>No. Blind Box Tracker is an independent collector tool and is not affiliated with, sponsored by, endorsed by, or officially connected to any collectible manufacturer, brand owner, licensor, retailer, or rights holder unless expressly stated.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section id="download" class="download-section">
+      <div class="download-panel">
+        <div>
+          <p class="section-kicker">Ready for your next pull?</p>
+          <h2>Start tracking your collection today.</h2>
+          <p>Open the app after every unboxing, keep your wishlist honest, and bring a clean trade list wherever collectors gather.</p>
+        </div>
+        <a class="button button-primary" href="https://apps.apple.com/us/app/blind-box-tracker/id6742131820" target="_blank" rel="noopener" aria-label="Download Blind Box Tracker on the App Store">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>
+          Download the App
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>Blind Box Tracker is an independent collector tool. Third-party names, images, and collectibles belong to their respective rights holders.</p>
+      <div class="footer-links">
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms-of-service.html">Terms</a>
+        <a href="support.html">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <aside class="sticky-download" aria-label="Sticky download call to action">
+    <div>
+      <strong>Track your pulls</strong>
+      <span>Wishlist, dupes, secrets, trades.</span>
+    </div>
+    <a class="button button-primary" href="https://apps.apple.com/us/app/blind-box-tracker/id6742131820" target="_blank" rel="noopener">Download</a>
+  </aside>
+</body>
+</html>
