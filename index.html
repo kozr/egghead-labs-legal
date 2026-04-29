@@ -566,28 +566,6 @@
       border-radius: 8px;
     }
 
-    .vote-board {
-      background: var(--brown);
-      color: var(--white);
-    }
-
-    .vote-board .board-top {
-      background: var(--lime-2);
-      color: var(--brown);
-    }
-
-    .vote-board .board-row {
-      grid-template-columns: minmax(0, 1fr) auto;
-      border-color: rgba(255, 253, 248, 0.16);
-      background: rgba(255, 253, 248, 0.08);
-      color: var(--white);
-    }
-
-    .vote-board .status-chip {
-      background: rgba(217, 239, 205, 0.16);
-      color: #e6f8d9;
-    }
-
     .series-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -814,10 +792,6 @@
       .board-row .status-chip {
         grid-column: 2;
         width: max-content;
-      }
-
-      .vote-board .board-row {
-        grid-template-columns: 1fr;
       }
 
       .footer-inner {
@@ -1052,38 +1026,16 @@
     </section>
 
     <section class="section section-white">
-      <div class="wrap split">
+      <div class="wrap">
         <div>
           <div class="section-header">
             <p class="section-kicker">Always growing</p>
-            <h2>Missing a series? Ask for it, then help decide what comes next.</h2>
-            <p class="section-lede">Collectors can suggest missing collections and vote on upcoming additions. The goal is simple: make the tracker better for the series people are actually opening, hunting, and trading right now.</p>
+            <h2>Missing a series? Ask for it.</h2>
+            <p class="section-lede">Collectors can suggest missing collections so the tracker keeps improving for the series people are actually opening, hunting, and trading right now.</p>
           </div>
           <div class="tag-row">
             <span class="tag">Suggest a series</span>
-            <span class="tag">Vote on additions</span>
             <span class="tag">Track new releases</span>
-          </div>
-        </div>
-
-        <div class="status-board vote-board" aria-label="Example voting board">
-          <div class="board-top">
-            <span>Collector requests</span>
-            <span class="board-pill">voting open</span>
-          </div>
-          <div class="board-list">
-            <div class="board-row">
-              <strong>New seasonal mini series</strong>
-              <span class="status-chip">248 votes</span>
-            </div>
-            <div class="board-row">
-              <strong>Secret variant checklist</strong>
-              <span class="status-chip">191 votes</span>
-            </div>
-            <div class="board-row">
-              <strong>More plush and keychain lines</strong>
-              <span class="status-chip">156 votes</span>
-            </div>
           </div>
         </div>
       </div>
@@ -1142,10 +1094,10 @@
             </div>
           </article>
           <article class="series-card">
-            <div class="series-placeholder">Vote next</div>
+            <div class="series-placeholder">Suggest next</div>
             <div class="series-body">
               <h3>More coming soon</h3>
-              <p>Suggest missing series and help choose what gets added next.</p>
+              <p>Suggest missing series and tell us what should be added next.</p>
             </div>
           </article>
         </div>
@@ -1166,7 +1118,7 @@
           </details>
           <details>
             <summary>Can I request missing series?</summary>
-            <p>Yes. You can suggest collections that are missing and vote on which series should be added next.</p>
+            <p>Yes. You can suggest collections that are missing so we know what collectors want added next.</p>
           </details>
           <details>
             <summary>Can I track secrets?</summary>
